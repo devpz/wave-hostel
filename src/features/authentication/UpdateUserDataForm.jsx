@@ -5,9 +5,11 @@ import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import { toast } from "react-hot-toast";
 
 import { useUser } from "./useUser";
 import { useUpdateUser } from "./useUpdateUser";
+import { isDemoMode, demoMessage } from "../../config";
 
 function UpdateUserDataForm() {
   const {
@@ -23,17 +25,22 @@ function UpdateUserDataForm() {
   const [avatar, setAvatar] = useState(null);
 
   function handleSubmit(e) {
-    e.preventDefault();
-    if (!fullName) return;
-    updateUser(
-      { fullName, avatar },
-      {
-        onSuccess: () => {
-          setAvatar(null);
-          e.target.reset();
-        },
-      }
-    );
+    if (isDemoMode) {
+      e.preventDefault();
+      toast.error(demoMessage);
+    } else {
+      e.preventDefault();
+      if (!fullName) return;
+      updateUser(
+        { fullName, avatar },
+        {
+          onSuccess: () => {
+            setAvatar(null);
+            e.target.reset();
+          },
+        }
+      );
+    }
   }
 
   function handleCancel() {

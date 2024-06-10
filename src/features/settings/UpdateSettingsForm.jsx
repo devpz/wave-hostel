@@ -4,6 +4,8 @@ import Input from "../../ui/Input";
 import Spinner from "../../ui/Spinner";
 import { useSettings } from "./useSettings";
 import { useUpdateSetting } from "./useUpdateSetting";
+import { isDemoMode, demoMessage } from "../../config";
+import toast from "react-hot-toast";
 
 function UpdateSettingsForm() {
   const {
@@ -20,10 +22,14 @@ function UpdateSettingsForm() {
   if (isLoading) return <Spinner />;
 
   function handleUpdate(e, field) {
-    const { value } = e.target;
+    if (isDemoMode) {
+      toast.error(demoMessage);
+    } else {
+      const { value } = e.target;
 
-    if (!value) return;
-    updateSetting({ [field]: value });
+      if (!value) return;
+      updateSetting({ [field]: value });
+    }
   }
 
   return (

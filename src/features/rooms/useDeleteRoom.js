@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { deleteRoom as deleteRoomApi } from "../../services/apiRooms";
+import { isDemoMode, demoMessage } from "../../config";
 
 export function useDeleteRoom() {
   const queryClient = useQueryClient();
@@ -17,5 +18,13 @@ export function useDeleteRoom() {
     onError: (err) => toast.error(err.message),
   });
 
-  return { isDeleting, deleteRoom };
+  const handleDeleteRoom = (roomId) => {
+    if (isDemoMode) {
+      toast.error(demoMessage);
+      return;
+    }
+    deleteRoom(roomId);
+  };
+
+  return { isDeleting, deleteRoom: handleDeleteRoom };
 }

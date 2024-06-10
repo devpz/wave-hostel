@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEditRoom } from "../../services/apiRooms";
 import { toast } from "react-hot-toast";
+import { isDemoMode, demoMessage } from "../../config";
 
 export function useEditRoom() {
   const queryClient = useQueryClient();
@@ -14,5 +15,13 @@ export function useEditRoom() {
     onError: (err) => toast.error(err.message),
   });
 
-  return { isEditing, editRoom };
+  const handleEditRoom = ({ newRoomData, id }) => {
+    if (isDemoMode) {
+      toast.error(demoMessage);
+      return;
+    }
+    editRoom({ newRoomData, id });
+  };
+
+  return { isEditing, editRoom: handleEditRoom };
 }

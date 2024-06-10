@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { deleteBooking as deleteBookingApi } from "../../services/apiBookings";
+import { isDemoMode, demoMessage } from "../../config";
 
 export function useDeleteBooking() {
   const queryClient = useQueryClient();
@@ -17,5 +18,13 @@ export function useDeleteBooking() {
     onError: (err) => toast.error(err.message),
   });
 
-  return { isDeleting, deleteBooking };
+  const handleDeleteBooking = (bookingId) => {
+    if (isDemoMode) {
+      toast.error(demoMessage);
+      return;
+    }
+    deleteBooking(bookingId);
+  };
+
+  return { isDeleting, deleteBooking: handleDeleteBooking };
 }

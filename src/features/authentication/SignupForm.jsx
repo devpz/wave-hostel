@@ -4,6 +4,8 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import { useSignup } from "./useSignup";
+import { isDemoMode, demoMessage } from "../../config";
+import toast from "react-hot-toast";
 
 function SignupForm() {
   const { signup, isLoading } = useSignup();
@@ -11,12 +13,16 @@ function SignupForm() {
   const { errors } = formState;
 
   function onSubmit({ fullName, email, password }) {
-    signup(
-      { fullName, email, password },
-      {
-        onSettled: () => reset(),
-      }
-    );
+    if (isDemoMode) {
+      toast.error(demoMessage);
+    } else {
+      signup(
+        { fullName, email, password },
+        {
+          onSettled: () => reset(),
+        }
+      );
+    }
   }
 
   return (
